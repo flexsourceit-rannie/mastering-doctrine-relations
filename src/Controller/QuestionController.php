@@ -55,8 +55,6 @@ class QuestionController extends AbstractController
             $this->logger->info('We are in debug mode!');
         }
 
-        $answers = $question->getAnswers();
-
         return $this->render('question/show.html.twig', [
             'question' => $question,
         ]);
