@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Answer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +18,30 @@ class AnswerRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Answer::class);
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Criteria
+     */
+    public static function createApprovedAnswers(): Criteria
+    {
+        return Criteria::create()
+            ->andWhere(Criteria::expr()->eq('status', Answer::STATUS_APPROVED));
+    }
+
+    /**
+     * @param int $max
+     *
+     * @return Answer[]
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
+    public function findAllApproved(int $max = 10): array
+    {
+        return $this->createQueryBuilder('answer')
+                ->addCriteria(self::createApprovedAnswers())
+                ->setMaxResults($max)
+                ->getQuery()
+                ->getResult();
     }
 
     // /**
