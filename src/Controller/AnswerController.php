@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Answer;
+use App\Repository\AnswerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,9 +41,14 @@ class AnswerController extends AbstractController
     /**
      * @Route("/answers/popular", name="app_popular_answers")
      * @return void
+     * @throws \Doctrine\ORM\Query\QueryException
      */
-    public function popularAnswers(): Response
+    public function popularAnswers(AnswerRepository $answerRepository, Request $request): Response
     {
-        return $this->render('answer/popularAnswers.html.twig');
+        $answers = $answerRepository->findMostPopular($request->query->get('query'));
+
+        return $this->render('answer/popularAnswers.html.twig', [
+            'answers' => $answers
+        ]);
     }
 }

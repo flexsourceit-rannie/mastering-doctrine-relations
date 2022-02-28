@@ -13,7 +13,12 @@ class MarkdownHelper
     private $isDebug;
     private $logger;
 
-    public function __construct(MarkdownParserInterface $markdownParser, CacheInterface $cache, bool $isDebug, LoggerInterface $mdLogger)
+    public function __construct(
+        MarkdownParserInterface $markdownParser,
+        CacheInterface $cache,
+        bool $isDebug,
+        LoggerInterface $mdLogger
+    )
     {
         $this->markdownParser = $markdownParser;
         $this->cache = $cache;
